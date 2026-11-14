@@ -1,0 +1,186 @@
+{
+  "construction": {
+    "access_recipe": "unchanged",
+    "expected_size": "Table profile reports 11,379,827 records over 1990-2026, i.e. roughly 300-320 thousand segment rows per year; eleven annual pulls are about 3.4 million rows, on the order of 150-400 MB uncompressed and tens of MB zipped. Aggregation collapses this to an estimated 15-25 thousand carrier-pair-month rows per month, so a few hundred thousand panel rows per year; labelled entry episodes are estimated at several hundred to about two thousand per year of cohort (roughly 8,000-12,000 rows total), which is an explicit estimate to be verified, not an observed count.",
+    "format": "Eleven annual ZIP archives from TranStats (one CSV per year, 45 documented fields), parsed to a monthly panel keyed by UniqueCarrier x OriginCityMarketID x DestCityMarketID, then reduced to one row per new-route entry episode; outputs are train/eval/holdout CSVs with a single 0/1 label column and no outcome-window columns.",
+    "source_examples": "Documented field/value checks to assert at construction: DepPerformed defined as 'Takeoffs made at an airport. (same as Completed Departures)'; Passengers as 'Non-Stop Segment Passengers Transported'; Seats as 'Available Seats'; Distance as 'Distance between airports (miles)'; Class code 'F' = 'Scheduled Passenger/ Cargo Service F' in the service-class lookup; UniqueCarrier suffixes such as PA, PA(1) separate reused IATA codes; OriginCityMarketID/DestCityMarketID group EWR/JFK/LGA-style multi-airport metros. Rows with DepPerformed = 0 while DepScheduled > 0 are cancellations and must not be read as route exit; the label uses performed departures only."
+  },
+  "dataset_id": "t100-new-route-survival",
+  "evidence": [
+    {
+      "claim": "T-100 Domestic Segment (U.S. Carriers) is a monthly carrier-origin-destination nonstop segment table covering 1990-2026 with 11,379,827 records and 45 fields.",
+      "quote": "This table contains domestic non-stop segment data reported by U.S. air carriers, including carrier, origin, destination, aircraft type and service class for transported passengers, freight and mail, available capacity, scheduled departures, departures performed, aircraft hours, and load factor when both origin and destination airports are located within the boundaries of the United States and its territories.",
+      "url": "https://www.transtats.bts.gov/TableInfo.asp?gnoyr_VQ=FIM&QO_fu146_anzr=Nv4%20Pn44vr45"
+    },
+    {
+      "claim": "The departure count used to build both eligibility and the label is a documented field, not a derived assumption.",
+      "quote": "Takeoffs made at an airport. (same as Completed Departures)",
+      "url": "https://www.transtats.bts.gov/TableInfo.asp?gnoyr_VQ=FIM&QO_fu146_anzr=Nv4%20Pn44vr45"
+    },
+    {
+      "claim": "The table is a BTS federal statistical product compiled from mandatory monthly carrier reports (Form T-100), which is why the compilation is a U.S. government work.",
+      "quote": "Certificated U.S. air carriers report monthly air carrier traffic information using Form T-100.",
+      "url": "https://www.transtats.bts.gov/DatabaseInfo.asp?QO_VQ=EED"
+    },
+    {
+      "claim": "Carrier identity is documented as reusable across years via a suffixed UniqueCarrier code, and city-market IDs consolidate airports serving one metro, both of which the unit definition relies on.",
+      "quote": "When the same code has been used by multiple carriers, a numeric suffix is used for earlier users, for example, PA, PA(1), PA(2). Use this field for analysis across a range of years.",
+      "url": "https://www.transtats.bts.gov/DL_SelectFields.aspx?gnoyr_VQ=FIM&QO_fu146_anzr=Nv4%20Pn44vr45"
+    },
+    {
+      "claim": "OriginCityMarketID exists in this table and is the documented way to define a metro-level route endpoint.",
+      "quote": "An identification number assigned by US DOT to identify a city market. Use this field to consolidate airports serving the same city market.",
+      "url": "https://www.transtats.bts.gov/DL_SelectFields.aspx?gnoyr_VQ=FIM&QO_fu146_anzr=Nv4%20Pn44vr45"
+    },
+    {
+      "claim": "Service class 'F' is the scheduled passenger/cargo class, which supports the scheduled-only population restriction.",
+      "quote": "\"F\",\"Scheduled Passenger/ Cargo Service F\"",
+      "url": "https://www.transtats.bts.gov/Download_Lookup.asp?Y11x72=Y_fReiVPR_PYNff"
+    },
+    {
+      "claim": "BTS's own data portal designates T-100-derived datasets as public domain and points back to the same TranStats table definitions.",
+      "quote": "Public Domain U.S. Government",
+      "url": "https://data.bts.gov/Aviation/AFF-T100-Segment-Summary-By-Carrier/q4tb-tbff/about_data"
+    },
+    {
+      "claim": "The statutory basis for redistribution without a publisher licence: federal government works are outside copyright, so no licence grant is needed for the BTS tabulation (underlying carrier filings are public data as published; the tabulation is BTS's).",
+      "quote": "Copyright protection under this title is not available for any work of the United States Government",
+      "url": "https://www.law.cornell.edu/uscode/text/17/105"
+    },
+    {
+      "claim": "BTS's standing practice for its statistical products is public domain reuse with a required source citation, which fixes the attribution obligation.",
+      "quote": "All material contained in this report is in the public domain and may be used and reprinted without special permission; source citation is required.",
+      "url": "https://www.bts.gov/browse-statistical-products-and-data/national-transportation-statistics/national-transportation-2"
+    },
+    {
+      "claim": "The analogous international T-100 data carry a six-month confidentiality rule, so the task is deliberately restricted to the domestic table to avoid restricted records.",
+      "quote": "The rules governing disclosure of the International T-100 data provide that data be kept confidential for a period of six months beyond the reporting date.",
+      "url": "https://www.transportation.gov/policy/aviation-policy/us-international-air-passenger-and-freight-statistics-report"
+    }
+  ],
+  "limitations": [
+    "No licence statement appears on the TranStats download page itself; the public-domain designation is taken from BTS's own data-portal metadata for T-100-derived products plus 17 U.S.C. 105, with BTS requiring source citation. Anyone re-publishing should carry the BTS credit line rather than assert a CC0 dedication over the upstream data.",
+    "The download path is an ASP.NET form postback with view-state tokens, not a stable static file URL; eleven annual pulls must be scripted, and the interface could change. The 'Prezipped File' option is the documented fallback.",
+    "The label treats a seasonal suspension as an exit whenever the carrier performs no departures in the three-month anniversary window, so genuinely seasonal routes launched in the wrong season are systematically coded as failures.",
+    "Corporate events are confounded with route failure: mergers, certificate transfers and UniqueCarrier re-coding make an acquired carrier's routes vanish from the panel and be labelled discontinued even where service continued under another code.",
+    "Entry episodes are not independent within carrier or within airport: a carrier that shuts down fails all of its new routes at once, and a hub's entry cohort shares the same local demand shock. Row counts overstate the effective number of independent events.",
+    "Domestic U.S. certificated carriers only: foreign-carrier entries, non-scheduled/charter service (classes L/N/P/Q/R/V) and all-cargo-only service are excluded, so results do not describe the whole market.",
+    "T-100 coverage of very small commuter operators is uneven and reporting practices vary, which is partly why the >=8 departures-in-entry-month rule is used; that rule also removes genuine but very thin new services.",
+    "City-market aggregation deliberately hides airport-level shifts within a metro (e.g. a move from one metro airport to another counts as continuous service), which is a definitional choice, not a measurement of airport-level survival.",
+    "All entries after 2018-12 are excluded because their anniversary windows cross the 2020 schedule collapse, so the task describes pre-2019 market structure and is a retrospective, current-vintage construction rather than proof of what an operator could have computed live in 2013.",
+    "No performance metrics were computed and none should be inferred from this selection; the base rate and the entry counts above are estimates pending construction."
+  ],
+  "reason": "BTS TranStats T-100 Domestic Segment (U.S. Carriers) is a single-publisher, no-account, public-domain federal statistical table whose monthly carrier-origin-destination records let us build a forward-looking binary task (does a brand-new domestic nonstop route still operate at its one-year anniversary?) entirely from one dataset, with no cross-agency join and no post-outcome fields used as inputs. All 14 candidate features are computable from months <= the decision instant, the label requires 15 months of future reports so it cannot be copied from any field present at entry, and BTS is an official source for the file itself with a form-based annual download. Main costs: the TranStats downloader is an ASP.NET postback (no static file), and the table carries no licence line of its own, so reuse rests on BTS's own 'Public Domain U.S. Government' designation plus 17 U.S.C. 105, with BTS requiring source citation.",
+  "source": {
+    "attribution": "U.S. Department of Transportation / Bureau of Transportation Statistics / https://www.bts.gov",
+    "citation": "BTS recommended citation: U.S. Department of Transportation, Bureau of Transportation Statistics, https://www.bts.gov (BTS states 'source citation is required'; add 'T-100 Domestic Segment (U.S. Carriers), TranStats' as the dataset-level source)",
+    "documentation_url": "https://www.transtats.bts.gov/Fields.asp?gnoyr_VQ=FIM",
+    "license": "Public Domain U.S. Government (BTS data-portal designation; federal statutory basis 17 U.S.C. 105)",
+    "publisher": "U.S. Department of Transportation, Bureau of Transportation Statistics (Office of Airline Information), distributed via TranStats",
+    "redistribution": true,
+    "terms_excerpt": "Public Domain U.S. Government",
+    "terms_url": "https://data.bts.gov/Aviation/AFF-T100-Segment-Summary-By-Carrier/q4tb-tbff/about_data",
+    "urls": [
+      "https://www.transtats.bts.gov/DL_SelectFields.aspx?gnoyr_VQ=FIM&QO_fu146_anzr=Nv4%20Pn44vr45"
+    ]
+  },
+  "task": {
+    "decision_user": "An airline network planner or airport route-development analyst at the end of a new route's first month of reported operation, deciding whether to keep, up-gauge, or begin winding down the commitment (gates, slots, crew base, co-op marketing).",
+    "features": [
+      {
+        "availability": "Class F entry month; missing retained",
+        "evidence_url": "https://www.transtats.bts.gov/Fields.asp?gnoyr_VQ=FIM",
+        "meaning": "Reported nonstop segment distance between the two airports in statute miles; modal value across Class F entry-month rows; time-invariant proxy for block time, fuel burn and yield pressure.",
+        "name": "distance_miles"
+      },
+      {
+        "availability": "Entry month M",
+        "evidence_url": "https://www.transtats.bts.gov/Fields.asp?gnoyr_VQ=FIM",
+        "meaning": "Calendar month of entry month M from 1 to 12; captures seasonality of route launches.",
+        "name": "entry_calendar_month"
+      },
+      {
+        "availability": "Point-in-time carrier aggregate; missing-aware",
+        "evidence_url": "https://www.transtats.bts.gov/Fields.asp?gnoyr_VQ=FIM",
+        "meaning": "Total DepPerformed by the carrier over months M-11 through M across all service classes reported in T-100; carrier scale and financial capacity proxy.",
+        "name": "carrier_departures_prior_12m"
+      },
+      {
+        "availability": "Point-in-time distinct-pair count; missing-aware",
+        "evidence_url": "https://www.transtats.bts.gov/Fields.asp?gnoyr_VQ=FIM",
+        "meaning": "Number of distinct directed city-market pairs on which the carrier performed departures in months M-11 through M; network breadth.",
+        "name": "carrier_active_pairs_prior_12m"
+      },
+      {
+        "availability": "Uses only M-12 and M, not target labels; missing-aware",
+        "evidence_url": "https://www.transtats.bts.gov/Fields.asp?gnoyr_VQ=FIM",
+        "meaning": "Share of the carrier directed pairs that operated in month M-12 but had zero departures in month M; point-in-time rate at which this carrier abandons routes.",
+        "name": "carrier_route_attrition_prior_12m"
+      },
+      {
+        "availability": "Point-in-time all-carrier aggregate; missing-aware",
+        "evidence_url": "https://www.transtats.bts.gov/Fields.asp?gnoyr_VQ=FIM",
+        "meaning": "All-carrier, all-class departures performed at the origin city market over months M-11 through M; origin hub or station size.",
+        "name": "origin_market_departures_prior_12m"
+      },
+      {
+        "availability": "Point-in-time all-carrier aggregate; missing-aware",
+        "evidence_url": "https://www.transtats.bts.gov/Fields.asp?gnoyr_VQ=FIM",
+        "meaning": "All-carrier, all-class departures performed at the destination city market over months M-11 through M; destination size.",
+        "name": "dest_market_departures_prior_12m"
+      },
+      {
+        "availability": "Point-in-time distinct other-carrier count; missing-aware",
+        "evidence_url": "https://www.transtats.bts.gov/Fields.asp?gnoyr_VQ=FIM",
+        "meaning": "Number of other UniqueCarrier codes with performed departures on the directed city-market pair in months M-3 through M-1; incumbent competition the entrant faces.",
+        "name": "competing_carriers_prior_3m"
+      },
+      {
+        "availability": "Point-in-time all-carrier total; missing-aware",
+        "evidence_url": "https://www.transtats.bts.gov/Fields.asp?gnoyr_VQ=FIM",
+        "meaning": "All-carrier, all-class departures performed on the directed city-market pair in months M-3 through M-1; zero indicates a previously unserved market rather than a contested one.",
+        "name": "pair_departures_prior_3m"
+      },
+      {
+        "availability": "Month M only",
+        "evidence_url": "https://www.transtats.bts.gov/Fields.asp?gnoyr_VQ=FIM",
+        "meaning": "The carrier own Class F DepPerformed on the directed pair in month M; intensity of the initial schedule commitment.",
+        "name": "entry_month_departures"
+      },
+      {
+        "availability": "Month M only; blank on missing seats or zero departures",
+        "evidence_url": "https://www.transtats.bts.gov/Fields.asp?gnoyr_VQ=FIM",
+        "meaning": "Class F Seats divided by Class F DepPerformed on the pair in month M; aircraft gauge committed to the route.",
+        "name": "entry_month_seats_per_departure"
+      },
+      {
+        "availability": "Month M only; blank on missing values or zero seats",
+        "evidence_url": "https://www.transtats.bts.gov/Fields.asp?gnoyr_VQ=FIM",
+        "meaning": "Class F Passengers divided by Class F Seats on the pair in month M; first-month demand realisation.",
+        "name": "entry_month_load_factor"
+      },
+      {
+        "availability": "Point-in-time zero-departure flag; missing-aware",
+        "evidence_url": "https://www.transtats.bts.gov/Fields.asp?gnoyr_VQ=FIM",
+        "meaning": "1 if the carrier performed zero departures at the origin city market in months M-12 through M-1, meaning the route also opens a new station; 0 if any departures occurred.",
+        "name": "carrier_new_at_origin"
+      },
+      {
+        "availability": "Point-in-time zero-departure flag; missing-aware",
+        "evidence_url": "https://www.transtats.bts.gov/Fields.asp?gnoyr_VQ=FIM",
+        "meaning": "1 if the carrier performed zero departures at the destination city market in months M-12 through M-1; 0 if any departures occurred.",
+        "name": "carrier_new_at_dest"
+      }
+    ],
+    "outcome_horizon": "12 to 14 months after the entry month (three-month anniversary window).",
+    "population": "Eligible unit is one carrier by directed origin city market by directed destination city market entry episode. In month M the carrier reports Class F scheduled passenger/cargo service, total Passengers greater than zero and total DepPerformed at least 8, and the same carrier performed zero departures on that directed pair in every month M-12 through M-1. Both endpoints are U.S. airports or territories in the U.S. carriers domestic T-100 table. The carrier is a U.S. certificated reporting carrier identified by UniqueCarrier. Months M+12 through M+14 must exist in the downloaded panel. Only entry months inside the frozen train eval and holdout windows are kept; no outcome condition enters eligibility. Rows lacking a fully reported anniversary window are omitted as unknown labels, never relabeled negative.",
+    "prediction_time": "Ninety days after the end of entry month M, after the monthly T-100 compilation for M is assumed available. Only T-100 records for months at or before M may enter features; months after M are unseen.",
+    "question": "When a U.S. certificated carrier starts scheduled passenger nonstop service on a domestic city market pair it has not served in the previous 12 months, will that service still be operating in the anniversary quarter 12-14 months later?",
+    "simple_references": "Majority-class control predicts still operating for every entry. Calendar-and-identity control uses carrier crossed with entry calendar month. Persistence analogue uses only the carrier trailing-12-month route-attrition rate plus carrier size as a single-feature score. Hub-presence rule predicts survival whenever the carrier already served both endpoint city markets in the prior 12 months. Lagged-persistence baselines are degenerate because every eligible row is a brand-new route, which is why the attrition rate is the persistence stand-in.",
+    "split_policy": "Frozen chronological boundaries by entry month, set before any modelling: train = entries in 2011-01..2014-06; eval (validation) = 2015-10..2016-09; holdout = 2018-01..2018-12. Two 15-month embargo gaps drop all entries in 2014-07..2015-09 and 2016-10..2017-12 so that no split's 14-month label window overlaps the next split's decision period. No entries after 2018-12 are used at all, because their anniversary windows fall inside the COVID-19 schedule collapse and would change the label's meaning. Data pulls cover 2010-01..2020-02 only.",
+    "target": "label = 1 if the carrier's summed DepPerformed (departures performed) on the directed city-market pair over months M+12, M+13 and M+14 equals 0, i.e. the route is not operating at its one-year anniversary; label = 0 if any departures were performed in that three-month anniversary window.",
+    "usefulness": "The label is absent from the entry-month record and requires 15 months of later carrier filings, so the model must predict a forward commercial commitment rather than copy a field. Features are strictly point-in-time and are useful for route development, airport incentive packages and market-entry research. First-month load factor, gauge, competition and whether the carrier opens new stations are informative but not deterministic. The positive rate is measured by the builder rather than assumed."
+  },
+  "title": "Will a newly launched U.S. domestic nonstop airline route still be operating a year later? Forward route-survival prediction from T-100 segment reports",
+  "verdict": "ready"
+}

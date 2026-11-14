@@ -1,0 +1,56 @@
+{
+  "name": "t100-new-route-survival",
+  "description": "When a U.S. certificated carrier starts scheduled passenger nonstop service on a domestic city market pair it has not served in the previous 12 months, will that service still be operating in the anniversary quarter 12-14 months later?",
+  "target": "discontinued",
+  "positive_label": 1,
+  "id_columns": [
+    "episode_id"
+  ],
+  "columns": [
+    "episode_id",
+    "entry_month",
+    "unique_carrier",
+    "origin_city_market_id",
+    "dest_city_market_id",
+    "distance_miles",
+    "entry_calendar_month",
+    "carrier_departures_prior_12m",
+    "carrier_active_pairs_prior_12m",
+    "carrier_route_attrition_prior_12m",
+    "origin_market_departures_prior_12m",
+    "dest_market_departures_prior_12m",
+    "competing_carriers_prior_3m",
+    "pair_departures_prior_3m",
+    "entry_month_departures",
+    "entry_month_seats_per_departure",
+    "entry_month_load_factor",
+    "carrier_new_at_origin",
+    "carrier_new_at_dest",
+    "discontinued"
+  ],
+  "rows": {
+    "train": 3734,
+    "eval": 834,
+    "holdout": 1209
+  },
+  "positive_rate": {
+    "train": 0.3181574718800214,
+    "eval": 0.3009592326139089,
+    "holdout": 0.35153019023986765
+  },
+  "split": {
+    "eval": {
+      "end": "2016-10-01T00:00:00.000",
+      "start": "2015-10-01T00:00:00.000"
+    },
+    "holdout": {
+      "end": "2019-01-01T00:00:00.000",
+      "start": "2018-01-01T00:00:00.000"
+    },
+    "train": {
+      "end": "2014-07-01T00:00:00.000",
+      "start": null
+    }
+  },
+  "split_description": "Frozen chronological boundaries by entry month, set before any modelling: train = entries in 2011-01..2014-06; eval (validation) = 2015-10..2016-09; holdout = 2018-01..2018-12. Two 15-month embargo gaps drop all entries in 2014-07..2015-09 and 2016-10..2017-12 so that no split's 14-month label window overlaps the next split's decision period. No entries after 2018-12 are used at all, because their anniversary windows fall inside the COVID-19 schedule collapse and would change the label's meaning. Data pulls cover 2010-01..2020-02 only."
+}

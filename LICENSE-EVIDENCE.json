@@ -1,0 +1,11 @@
+{
+  "ok": true,
+  "terms_url": "https://data.bts.gov/Aviation/AFF-T100-Segment-Summary-By-Carrier/q4tb-tbff/about_data",
+  "terms_sha256": "4aa853473ac7758fc3a903c8df79f8c0c08da29669f573cf92339252eb8256ee",
+  "documentation_url": "https://www.transtats.bts.gov/Fields.asp?gnoyr_VQ=FIM",
+  "documentation_sha256": "e357714959695151962fc325557517313e5600f6999e6811927f27abb99e9590",
+  "quoted_excerpt": "Public Domain U.S. Government",
+  "excerpt_found": true,
+  "excerpt_match": "contiguous",
+  "scope": "Captured publisher bytes and quote presence; semantic applicability reviewed separately"
+}

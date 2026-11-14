@@ -1,0 +1,375 @@
+{
+  "construction_notes": "Timing metadata repair only. The prior run failed exactly one gate check, timing.instant_accounts_for_publication_lag, with detail that the prediction instant kind was administrative_record while declared features have a 90-day availability lag after the period. The gate requires the prediction instant to be expressed as a lag-derived instant whenever declared features carry a positive publication/availability lag. I therefore changed only timing.prediction_instant.kind from administrative_record to publication and kept the identical 90-day days_after_period_end and period M, plus an explicit citation noting the lag is an assumed administrative availability lag and not a measured publisher date. timing.features.source_kind stays administrative_record because the source is a monthly administrative carrier filing, and timing.observations stays empty because no actual ISO publication dates were supplied; unknown dates are recorded in limitations, not invented in date fields. No change to build_py, references, source_access_recipe, the frozen population, target, features, splits, or the existing row checks; the download and row construction produced the frozen rows and are retained unchanged. Remaining material interpretation limits are unchanged: no historical vintages or full-row availability ledger, so training_label_timing is unverified; the 90-day lag is assumed; carrier identity is the conservative day-level event cluster because the source has month-level dates only; unknown anniversary windows are dropped rather than labelled negative; absent pair-months are treated as zero departures only after month-coverage and missing-DepPerformed checks.",
+  "quality": {
+    "carry_columns": [
+      "unique_carrier",
+      "origin_city_market_id",
+      "dest_city_market_id"
+    ],
+    "evaluation_contract": {
+      "access": "isolated_rows",
+      "cross_row_audit": {
+        "auxiliary_files_review": "Only public/train.csv, public/eval.csv and private/holdout.csv are shipped; no fixture labels, target proxies or answer scaffolds are present.",
+        "probes": [],
+        "rationale": "Each scored row carries precomputed point-in-time features; no future or label-derived group rate is shipped."
+      },
+      "feature_evidence": {
+        "carrier_active_pairs_prior_12m": {
+          "availability": "Point-in-time distinct-pair count; missing-aware",
+          "source": "T-100 UniqueCarrier, OriginCityMarketID, DestCityMarketID and DepPerformed over M-11 through M",
+          "status": "assumed"
+        },
+        "carrier_departures_prior_12m": {
+          "availability": "Point-in-time carrier aggregate; missing-aware",
+          "source": "T-100 DepPerformed aggregated over carrier months M-11 through M",
+          "status": "assumed"
+        },
+        "carrier_new_at_dest": {
+          "availability": "Point-in-time zero-departure flag; missing-aware",
+          "source": "T-100 UniqueCarrier, DestCityMarketID and DepPerformed over M-12 through M-1",
+          "status": "assumed"
+        },
+        "carrier_new_at_origin": {
+          "availability": "Point-in-time zero-departure flag; missing-aware",
+          "source": "T-100 UniqueCarrier, OriginCityMarketID and DepPerformed over M-12 through M-1",
+          "status": "assumed"
+        },
+        "carrier_route_attrition_prior_12m": {
+          "availability": "Uses only M-12 and M, not target labels; missing-aware",
+          "source": "T-100 DepPerformed for carrier pairs active in M-12 and M",
+          "status": "assumed"
+        },
+        "competing_carriers_prior_3m": {
+          "availability": "Point-in-time distinct other-carrier count; missing-aware",
+          "source": "T-100 UniqueCarrier and DepPerformed on the directed pair over M-3 through M-1",
+          "status": "assumed"
+        },
+        "dest_city_market_id": {
+          "availability": "Entry-month record",
+          "source": "T-100 DestCityMarketID field documented for consolidating airports serving one city market",
+          "status": "verified"
+        },
+        "dest_market_departures_prior_12m": {
+          "availability": "Point-in-time all-carrier aggregate; missing-aware",
+          "source": "T-100 DestCityMarketID and DepPerformed over M-11 through M",
+          "status": "assumed"
+        },
+        "distance_miles": {
+          "availability": "Class F entry month; missing retained",
+          "source": "T-100 Distance field",
+          "status": "verified"
+        },
+        "entry_calendar_month": {
+          "availability": "Entry month M",
+          "source": "T-100 Month field",
+          "status": "verified"
+        },
+        "entry_month": {
+          "availability": "Known at the decision instant; month M compilation assumed available 90 days after month end",
+          "source": "T-100 Year and Month fields converted to the first day of month M",
+          "status": "verified"
+        },
+        "entry_month_departures": {
+          "availability": "Month M only",
+          "source": "T-100 DepPerformed for Class F entry-month rows",
+          "status": "verified"
+        },
+        "entry_month_load_factor": {
+          "availability": "Month M only; blank on missing values or zero seats",
+          "source": "T-100 Passengers and Seats for Class F entry-month rows",
+          "status": "assumed"
+        },
+        "entry_month_seats_per_departure": {
+          "availability": "Month M only; blank on missing seats or zero departures",
+          "source": "T-100 Seats and DepPerformed for Class F entry-month rows",
+          "status": "assumed"
+        },
+        "episode_id": {
+          "availability": "Constructed at the decision instant from entry-month identifiers",
+          "source": "Constructed deterministic key from UniqueCarrier, OriginCityMarketID, DestCityMarketID, Year and Month in the T-100 U.S. carriers domestic segment table",
+          "status": "verified"
+        },
+        "origin_city_market_id": {
+          "availability": "Entry-month record",
+          "source": "T-100 OriginCityMarketID field documented for consolidating airports serving one city market",
+          "status": "verified"
+        },
+        "origin_market_departures_prior_12m": {
+          "availability": "Point-in-time all-carrier aggregate; missing-aware",
+          "source": "T-100 OriginCityMarketID and DepPerformed over M-11 through M",
+          "status": "assumed"
+        },
+        "pair_departures_prior_3m": {
+          "availability": "Point-in-time all-carrier total; missing-aware",
+          "source": "T-100 DepPerformed on the directed pair over M-3 through M-1",
+          "status": "assumed"
+        },
+        "unique_carrier": {
+          "availability": "Entry-month record",
+          "source": "T-100 UniqueCarrier field documented as reusable across years with numeric suffixes",
+          "status": "verified"
+        }
+      },
+      "limitations": [
+        "No historical vintages or full-row availability ledger are supplied; the current TranStats snapshot is used and training_label_timing is unverified.",
+        "No publisher publication schedule was supplied; a conservative 90-day administrative availability lag is assumed for timing metadata and is not a measured publication date.",
+        "The source has month-level dates only; the qualification event cluster is the carrier identity, not a day-level event timestamp.",
+        "T-100 publication lag is not documented in the supplied evidence; no zero-day publication date is invented.",
+        "Absence of a T-100 pair-month row is treated as zero performed departures only after global month coverage and missing-DepPerformed checks; missing feature values are blank rather than zero.",
+        "City-market aggregation hides airport-level shifts inside a metro.",
+        "Seasonal suspensions, mergers, certificate transfers and carrier re-coding can be coded as route exits.",
+        "Entries are not independent within a carrier or hub; route counts overstate independent events.",
+        "The frozen population is U.S. certificated carriers and Class F scheduled service; foreign carriers, non-scheduled classes and all-cargo-only service are not described.",
+        "Small commuter coverage is uneven and the at-least-8-departures rule removes very thin services.",
+        "Entries after 2018-12 are excluded because their anniversary windows cross the 2020 schedule collapse.",
+        "The label uses all-class DepPerformed over M+12 through M+14 as frozen; if only scheduled passenger service is intended, the semantics differ.",
+        "The base rate is measured by construction and is not assumed."
+      ],
+      "selection": {
+        "evidence": "Frozen population and split policy; eligibility uses only month M and prior months, while the label uses months M+12 through M+14.",
+        "fields": [
+          "Class",
+          "Passengers",
+          "DepPerformed",
+          "Year",
+          "Month",
+          "UniqueCarrier",
+          "OriginCityMarketID",
+          "DestCityMarketID"
+        ],
+        "kind": "prediction_time",
+        "rule": "Include one entry episode when Class F, total Passengers greater than zero and total DepPerformed at least 8 in month M, the same carrier has zero performed departures on the directed pair in every month M-12 through M-1, and M falls in a frozen split window. Only month M and prior months enter eligibility or features. Rows whose anniversary window M+12 through M+14 is not fully reported are omitted from supervised output as unknown-label rows and are never labelled negative. No outcome value enters eligibility."
+      },
+      "training_label_timing": "unverified",
+      "use": "retrospective_research",
+      "vintage": {
+        "evidence": "Current TranStats bulk files are updated in place; no historical vintage is available in the supplied evidence.",
+        "kind": "current_snapshot"
+      }
+    },
+    "event_key_column": "unique_carrier",
+    "expected_duplicate_ids": 0,
+    "external_threshold": {
+      "source": "Frozen population rule in the task: at least 8 performed departures in the entry month, about twice weekly; not fitted to labels",
+      "unit": "departures performed in entry month M",
+      "value": 8
+    },
+    "features": [
+      "distance_miles",
+      "entry_calendar_month",
+      "carrier_departures_prior_12m",
+      "carrier_active_pairs_prior_12m",
+      "carrier_route_attrition_prior_12m",
+      "origin_market_departures_prior_12m",
+      "dest_market_departures_prior_12m",
+      "competing_carriers_prior_3m",
+      "pair_departures_prior_3m",
+      "entry_month_departures",
+      "entry_month_seats_per_departure",
+      "entry_month_load_factor",
+      "carrier_new_at_origin",
+      "carrier_new_at_dest"
+    ],
+    "features_documented_at": "prediction_time",
+    "high_cardinality_columns": [
+      "episode_id",
+      "entry_month",
+      "unique_carrier",
+      "origin_city_market_id",
+      "dest_city_market_id",
+      "carrier_route_attrition_prior_12m",
+      "distance_miles"
+    ],
+    "id_columns": [
+      "episode_id"
+    ],
+    "label_source_columns": [
+      "DepPerformed"
+    ],
+    "measurements": [
+      {
+        "column": "entry_month_departures",
+        "frame": "Class F DepPerformed summed over the entry month M",
+        "unit": "departures performed"
+      },
+      {
+        "column": "distance_miles",
+        "frame": "reported nonstop segment Distance, modal across entry-month Class F rows",
+        "unit": "statute miles"
+      },
+      {
+        "column": "entry_month_seats_per_departure",
+        "frame": "Class F Seats divided by Class F DepPerformed for month M",
+        "unit": "seats per departure"
+      },
+      {
+        "column": "entry_month_load_factor",
+        "frame": "Class F Passengers divided by Class F Seats for month M",
+        "unit": "ratio"
+      },
+      {
+        "column": "carrier_route_attrition_prior_12m",
+        "frame": "share of carrier directed pairs active in M-12 with no departures in M",
+        "unit": "ratio"
+      }
+    ],
+    "name": "t100-new-route-survival",
+    "positive_label": 1,
+    "post_hoc_columns": [
+      "DepPerformed"
+    ],
+    "split_windows": {
+      "eval": {
+        "end": "2016-10-01T00:00:00.000",
+        "start": "2015-10-01T00:00:00.000"
+      },
+      "holdout": {
+        "end": "2019-01-01T00:00:00.000",
+        "start": "2018-01-01T00:00:00.000"
+      },
+      "train": {
+        "end": "2014-07-01T00:00:00.000",
+        "start": null
+      }
+    },
+    "splits": {
+      "eval": "public/eval.csv",
+      "holdout": "private/holdout.csv",
+      "train": "public/train.csv"
+    },
+    "target": "discontinued",
+    "task": {
+      "features": [
+        {
+          "availability": "Present on T-100 segment records; modal value over the entry month Class F rows; missing retained as blank rather than imputed.",
+          "evidence_url": "https://www.transtats.bts.gov/Fields.asp?gnoyr_VQ=FIM",
+          "meaning": "Reported nonstop segment distance between the two airports in statute miles; modal value across Class F entry-month rows; time-invariant proxy for block time, fuel burn and yield pressure.",
+          "name": "distance_miles"
+        },
+        {
+          "availability": "Derived from the Year and Month fields of the entry-month records; known at the decision instant.",
+          "evidence_url": "https://www.transtats.bts.gov/Fields.asp?gnoyr_VQ=FIM",
+          "meaning": "Calendar month of entry month M from 1 to 12; captures seasonality of route launches.",
+          "name": "entry_calendar_month"
+        },
+        {
+          "availability": "Sum over T-100 rows for months at or before M only; blank if any contributing carrier-month has missing DepPerformed.",
+          "evidence_url": "https://www.transtats.bts.gov/Fields.asp?gnoyr_VQ=FIM",
+          "meaning": "Total DepPerformed by the carrier over months M-11 through M across all service classes reported in T-100; carrier scale and financial capacity proxy.",
+          "name": "carrier_departures_prior_12m"
+        },
+        {
+          "availability": "Distinct union over months at or before M only; blank if any contributing carrier-month has missing DepPerformed.",
+          "evidence_url": "https://www.transtats.bts.gov/Fields.asp?gnoyr_VQ=FIM",
+          "meaning": "Number of distinct directed city-market pairs on which the carrier performed departures in months M-11 through M; network breadth.",
+          "name": "carrier_active_pairs_prior_12m"
+        },
+        {
+          "availability": "Computed only from months M-12 and M, both at or before the decision instant; no target labels are used; blank when either carrier-month has missing departures or when no prior pairs exist.",
+          "evidence_url": "https://www.transtats.bts.gov/Fields.asp?gnoyr_VQ=FIM",
+          "meaning": "Share of the carrier directed pairs that operated in month M-12 but had zero departures in month M; point-in-time rate at which this carrier abandons routes.",
+          "name": "carrier_route_attrition_prior_12m"
+        },
+        {
+          "availability": "Aggregated from months at or before M only; blank if any contributing market-month has missing DepPerformed.",
+          "evidence_url": "https://www.transtats.bts.gov/Fields.asp?gnoyr_VQ=FIM",
+          "meaning": "All-carrier, all-class departures performed at the origin city market over months M-11 through M; origin hub or station size.",
+          "name": "origin_market_departures_prior_12m"
+        },
+        {
+          "availability": "Aggregated from months at or before M only; blank if any contributing market-month has missing DepPerformed.",
+          "evidence_url": "https://www.transtats.bts.gov/Fields.asp?gnoyr_VQ=FIM",
+          "meaning": "All-carrier, all-class departures performed at the destination city market over months M-11 through M; destination size.",
+          "name": "dest_market_departures_prior_12m"
+        },
+        {
+          "availability": "Computed from months before M only; all service classes reported in T-100; blank if any pair-month in the window has missing DepPerformed.",
+          "evidence_url": "https://www.transtats.bts.gov/Fields.asp?gnoyr_VQ=FIM",
+          "meaning": "Number of other UniqueCarrier codes with performed departures on the directed city-market pair in months M-3 through M-1; incumbent competition the entrant faces.",
+          "name": "competing_carriers_prior_3m"
+        },
+        {
+          "availability": "Computed from months before M only; zero only when no rows exist and no missing departures are present; blank if missing departures make zero unverifiable.",
+          "evidence_url": "https://www.transtats.bts.gov/Fields.asp?gnoyr_VQ=FIM",
+          "meaning": "All-carrier, all-class departures performed on the directed city-market pair in months M-3 through M-1; zero indicates a previously unserved market rather than a contested one.",
+          "name": "pair_departures_prior_3m"
+        },
+        {
+          "availability": "Month M only, the month ending at the decision instant; used in the frozen population rule of at least 8 departures.",
+          "evidence_url": "https://www.transtats.bts.gov/Fields.asp?gnoyr_VQ=FIM",
+          "meaning": "The carrier own Class F DepPerformed on the directed pair in month M; intensity of the initial schedule commitment.",
+          "name": "entry_month_departures"
+        },
+        {
+          "availability": "Seats and DepPerformed for month M only; blank when Seats is missing or the departure denominator is zero.",
+          "evidence_url": "https://www.transtats.bts.gov/Fields.asp?gnoyr_VQ=FIM",
+          "meaning": "Class F Seats divided by Class F DepPerformed on the pair in month M; aircraft gauge committed to the route.",
+          "name": "entry_month_seats_per_departure"
+        },
+        {
+          "availability": "Passengers and Seats for month M only; blank when either is missing or Seats is zero; reported values are not clipped.",
+          "evidence_url": "https://www.transtats.bts.gov/Fields.asp?gnoyr_VQ=FIM",
+          "meaning": "Class F Passengers divided by Class F Seats on the pair in month M; first-month demand realisation.",
+          "name": "entry_month_load_factor"
+        },
+        {
+          "availability": "Built from months before M only across all T-100 service classes; blank if missing departures make zero unverifiable.",
+          "evidence_url": "https://www.transtats.bts.gov/Fields.asp?gnoyr_VQ=FIM",
+          "meaning": "1 if the carrier performed zero departures at the origin city market in months M-12 through M-1, meaning the route also opens a new station; 0 if any departures occurred.",
+          "name": "carrier_new_at_origin"
+        },
+        {
+          "availability": "Built from months before M only across all T-100 service classes; blank if missing departures make zero unverifiable.",
+          "evidence_url": "https://www.transtats.bts.gov/Fields.asp?gnoyr_VQ=FIM",
+          "meaning": "1 if the carrier performed zero departures at the destination city market in months M-12 through M-1; 0 if any departures occurred.",
+          "name": "carrier_new_at_dest"
+        }
+      ],
+      "population": "Eligible unit is one carrier by directed origin city market by directed destination city market entry episode. In month M the carrier reports Class F scheduled passenger/cargo service, total Passengers greater than zero and total DepPerformed at least 8, and the same carrier performed zero departures on that directed pair in every month M-12 through M-1. Both endpoints are U.S. airports or territories in the U.S. carriers domestic T-100 table. The carrier is a U.S. certificated reporting carrier identified by UniqueCarrier. Months M+12 through M+14 must exist in the downloaded panel. Only entry months inside the frozen train eval and holdout windows are kept; no outcome condition enters eligibility. Rows lacking a fully reported anniversary window are omitted as unknown labels, never relabeled negative.",
+      "prediction_time": "Ninety days after the end of entry month M, after the monthly T-100 compilation for M is assumed available. Only T-100 records for months at or before M may enter features; months after M are unseen.",
+      "question": "Will a newly launched U.S. domestic scheduled nonstop route be discontinued in the three-month anniversary window 12 to 14 months after its entry month?",
+      "simple_references": "Majority-class control predicts still operating for every entry. Calendar-and-identity control uses carrier crossed with entry calendar month. Persistence analogue uses only the carrier trailing-12-month route-attrition rate plus carrier size as a single-feature score. Hub-presence rule predicts survival whenever the carrier already served both endpoint city markets in the prior 12 months. Lagged-persistence baselines are degenerate because every eligible row is a brand-new route, which is why the attrition rate is the persistence stand-in.",
+      "usefulness": "The label is absent from the entry-month record and requires 15 months of later carrier filings, so the model must predict a forward commercial commitment rather than copy a field. Features are strictly point-in-time and are useful for route development, airport incentive packages and market-entry research. First-month load factor, gauge, competition and whether the carrier opens new stations are informative but not deterministic. The positive rate is measured by the builder rather than assumed."
+    },
+    "time_column": "entry_month",
+    "timing": {
+      "features": {
+        "period": "M",
+        "published_days_after_period_end": 90,
+        "source_kind": "administrative_record"
+      },
+      "observations": [],
+      "prediction_instant": {
+        "citation": "T-100 monthly carrier filings; no publisher schedule was supplied, so a conservative 90-day administrative availability lag is assumed. This instant is expressed as a lag-derived availability instant derived from that assumption, not a measured publication date.",
+        "days_after_period_end": 90,
+        "kind": "publication",
+        "period": "M"
+      },
+      "row_selection": {
+        "fields": [
+          "Class",
+          "Passengers",
+          "DepPerformed",
+          "Year",
+          "Month",
+          "UniqueCarrier",
+          "OriginCityMarketID",
+          "DestCityMarketID"
+        ],
+        "latest_period_used": "M",
+        "rule": "Frozen eligibility uses Class F, total Passengers greater than zero, total DepPerformed at least 8 in month M, zero performed departures on the directed pair in M-12 through M-1, and an entry month inside the fixed split windows. Only month M and prior months enter eligibility or features. Rows whose anniversary window M+12 through M+14 is not fully reported are omitted from supervised output as unknown-label rows and are never relabelled negative. No outcome value enters eligibility."
+      }
+    },
+    "title": "Will a newly launched U.S. domestic nonstop airline route be discontinued in its 12-14 month anniversary quarter?"
+  },
+  "references": {
+    "entity_columns": [
+      "unique_carrier",
+      "origin_city_market_id",
+      "dest_city_market_id"
+    ],
+    "persistence_column": null,
+    "persistence_direction": 1
+  },
+  "source_access_recipe": "unchanged"
+}

@@ -1,0 +1,23 @@
+{
+  "publisher-terms.snapshot": {
+    "url": "https://data.bts.gov/Aviation/AFF-T100-Segment-Summary-By-Carrier/q4tb-tbff/about_data",
+    "bytes": 640995,
+    "sha256": "4aa853473ac7758fc3a903c8df79f8c0c08da29669f573cf92339252eb8256ee",
+    "retrieved_at_unix": 1794620316.353651,
+    "transport_attempts": 1
+  },
+  "publisher-documentation.snapshot": {
+    "url": "https://www.transtats.bts.gov/Fields.asp?gnoyr_VQ=FIM",
+    "bytes": 132771,
+    "sha256": "e357714959695151962fc325557517313e5600f6999e6811927f27abb99e9590",
+    "retrieved_at_unix": 1794620318.0213325,
+    "transport_attempts": 1
+  },
+  "t100_download_page.html": {
+    "url": "https://www.transtats.bts.gov/DL_SelectFields.aspx?gnoyr_VQ=FIM&QO_fu146_anzr=Nv4%20Pn44vr45",
+    "bytes": 148291,
+    "sha256": "1467658373e6a68abb24d6c8023d97df745546c358677f80350460e9e900e471",
+    "retrieved_at_unix": 1794620330.4833062,
+    "transport_attempts": 1
+  }
+}

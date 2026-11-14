@@ -1,0 +1,189 @@
+{
+  "checks": [
+    {
+      "check": "download_form_state",
+      "observed": "hidden_inputs ['__EVENTARGUMENT', '__EVENTTARGET', '__EVENTVALIDATION', '__LASTFOCUS', '__VIEWSTATE', '__VIEWSTATEGENERATOR', 'affiliate'] select_names ['cboGeography', 'cboPeriod', 'cboYear']",
+      "expected": "the ASP.NET download form exposes hidden viewstate inputs plus year and period selectors",
+      "passed": true
+    },
+    {
+      "check": "form_field_names",
+      "observed": "checkbox_count 52 names ['AIRCRAFT_CONFIG', 'AIRCRAFT_GROUP', 'AIRCRAFT_TYPE', 'AIRLINE_ID', 'AIR_TIME', 'CARRIER', 'CARRIER_GROUP', 'CARRIER_GROUP_NEW', 'CARRIER_NAME', 'CLASS', 'DEPARTURES_PERFORMED', 'DEPARTURES_SCHEDULED', 'DEST', 'DEST_AIRPORT_ID', 'DEST_AIRPORT_SEQ_ID', 'DEST_CITY_MARKET_ID', 'DEST_CITY_NAME', 'DEST_STATE_ABR', 'DEST_STATE_FIPS', 'DEST_STATE_NM', 'DEST_WAC', 'DISTANCE', 'DISTANCE_GROUP', 'FREIGHT', 'MAIL', 'MONTH', 'ORIGIN', 'ORIGIN_AIRPORT_ID', 'ORIGIN_AIRPORT_SEQ_ID', 'ORIGIN_CITY_MARKET_ID', 'ORIGIN_CITY_NAME', 'ORIGIN_STATE_ABR', 'ORIGIN_STATE_FIPS', 'ORIGIN_STATE_NM', 'ORIGIN_WAC', 'PASSENGERS', 'PAYLOAD', 'QUARTER', 'RAMP_TO_RAMP', 'REGION', 'SEATS', 'UNIQUE_CARRIER', 'UNIQUE_CARRIER_ENTITY', 'UNIQUE_CARRIER_NAME', 'YEAR', 'chkAllGroups', 'chkAllVars', 'chkDocument', 'chkDownloadZip', 'chkMergeSub', 'chkTermDef', 'chkshowNull']",
+      "expected": "download form exposes field checkboxes for ['carrier', 'class', 'dep', 'dest_market', 'distance', 'month', 'origin_market', 'passengers', 'seats', 'year']",
+      "passed": true
+    },
+    {
+      "check": "form_year_options",
+      "observed": "count 37 first ['1990', '1991', '1992'] last ['2024', '2025', '2026']",
+      "expected": "the download form offers every panel year from 2010 through 2020",
+      "passed": true
+    },
+    {
+      "check": "form_period_options",
+      "observed": "all_value All month_options ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12']",
+      "expected": "the period selector offers month values and may offer an All value",
+      "passed": true
+    },
+    {
+      "check": "source_archives",
+      "observed": "archive_count 12 sample ['t100d_fim_2010_All.zip', 't100d_fim_2011_All.zip', 't100d_fim_2012_All.zip'] provenance landing page cached as t100_download_page.html bytes 148291",
+      "expected": "publisher archives covering every month 2010-01 through 2020-02 are present as zip files",
+      "passed": true
+    },
+    {
+      "check": "pair_month_unique",
+      "observed": "duplicates 0",
+      "expected": "one carrier directed city market pair per month in the collapsed panel",
+      "passed": true
+    },
+    {
+      "check": "panel_month_coverage",
+      "observed": "present 122 missing []",
+      "expected": "every month from 2010-01 through 2020-02 has carrier pair month rows",
+      "passed": true
+    },
+    {
+      "check": "departures_nonnegative",
+      "observed": "min pair month departures 0.0",
+      "expected": "DepPerformed is a nonnegative count of takeoffs made at an airport",
+      "passed": true,
+      "kind": "unit"
+    },
+    {
+      "check": "class_F_present",
+      "observed": "F rows 2783416 top classes [('F', 2783416), ('L', 432754), ('G', 375090), ('P', 94907)]",
+      "expected": "service class F scheduled passenger rows are present in the T-100 segment download",
+      "passed": true
+    },
+    {
+      "check": "non_F_classes_counted",
+      "observed": "non_F rows 902751 total rows 3686167 top classes [('F', 2783416), ('L', 432754), ('G', 375090), ('P', 94907)]",
+      "expected": "other service classes are counted and are not required to be absent from the publisher download",
+      "passed": true
+    },
+    {
+      "check": "key_completeness",
+      "observed": "total rows 3686167 used rows 3685519 missing key rows 648",
+      "expected": "rows with carrier and city market and year and month keys are used while rows missing keys are counted",
+      "passed": true
+    },
+    {
+      "check": "entry_candidates_before_prior",
+      "observed": "rows 611735",
+      "expected": "at least one Class F entry month pair row with performed departures and passengers inside a frozen window",
+      "passed": true
+    },
+    {
+      "check": "entry_passengers_positive",
+      "observed": "min 1.0 nulls 0 rows 611735",
+      "expected": "every candidate entry month carries Class F passengers greater than zero",
+      "passed": true
+    },
+    {
+      "check": "prior_pair_zero",
+      "observed": "before 611735 excluded 605958 after 5777 remaining_bad 0",
+      "expected": "every included entry has zero performed departures on the directed pair in months M-12 through M-1",
+      "passed": true
+    },
+    {
+      "check": "label_unknown_excluded",
+      "observed": "excluded_unknown 0 remaining_unknown 0 labelled 5777",
+      "expected": "rows whose anniversary window has missing performed departures are excluded and never labelled negative",
+      "passed": true
+    },
+    {
+      "check": "entry_population",
+      "observed": "rows 5777",
+      "expected": "at least one eligible entry episode with a complete anniversary label",
+      "passed": true
+    },
+    {
+      "check": "target_binary",
+      "observed": "bad 0 null 0",
+      "expected": "the discontinued target is 0 or 1 with no missing values",
+      "passed": true
+    },
+    {
+      "check": "stable_ids_unique",
+      "observed": "duplicates 0",
+      "expected": "episode_id is unique across all splits",
+      "passed": true
+    },
+    {
+      "check": "declared_features_nonempty",
+      "observed": "non_null_counts {'distance_miles': 5775, 'entry_calendar_month': 5777, 'carrier_departures_prior_12m': 5777, 'carrier_active_pairs_prior_12m': 5777, 'carrier_route_attrition_prior_12m': 5708, 'origin_market_departures_prior_12m': 5777, 'dest_market_departures_prior_12m': 5777, 'competing_carriers_prior_3m': 5777, 'pair_departures_prior_3m': 5777, 'entry_month_departures': 5777, 'entry_month_seats_per_departure': 5777, 'entry_month_load_factor': 5777, 'carrier_new_at_origin': 5777, 'carrier_new_at_dest': 5777}",
+      "expected": "every declared feature has at least one non null value",
+      "passed": true
+    },
+    {
+      "check": "entry_threshold_unit",
+      "observed": "min 8.0 non_integer 0",
+      "expected": "DepPerformed is an integer takeoff count and the frozen population requires at least 8 Class F departures in month M",
+      "passed": true,
+      "kind": "unit"
+    },
+    {
+      "check": "distance_miles_positive",
+      "observed": "shipped nonpositive 0 nonnull 5775 source_class_F_nonpositive 4871 source_class_F_missing 0",
+      "expected": "the reported nonstop segment distance is positive statute miles; nonpositive recorded source values are excluded from the modal distance and shipped as missing, never as zero or negative",
+      "passed": true,
+      "kind": "unit"
+    },
+    {
+      "check": "seats_per_departure_positive",
+      "observed": "nonpositive 0 nonnull 5777",
+      "expected": "seats per performed departure is a positive capacity ratio",
+      "passed": true,
+      "kind": "unit"
+    },
+    {
+      "check": "load_factor_finite",
+      "observed": "nonnull 5777 finite True negative 0",
+      "expected": "load factor is a finite reported passenger to seat ratio and is not clipped",
+      "passed": true,
+      "kind": "unit"
+    },
+    {
+      "check": "splits_nonempty",
+      "observed": "counts {'train': 3734, 'eval': 834, 'holdout': 1209}",
+      "expected": "all three frozen splits contain rows",
+      "passed": true
+    },
+    {
+      "check": "split_window_train",
+      "observed": "min 2011-01-01 max 2014-06-01",
+      "expected": "half open window from 2011-01-01 to 2014-07-01",
+      "passed": true
+    },
+    {
+      "check": "split_window_eval",
+      "observed": "min 2015-10-01 max 2016-09-01",
+      "expected": "half open window from 2015-10-01 to 2016-10-01",
+      "passed": true
+    },
+    {
+      "check": "split_window_holdout",
+      "observed": "min 2018-01-01 max 2018-12-01",
+      "expected": "half open window from 2018-01-01 to 2019-01-01",
+      "passed": true
+    },
+    {
+      "check": "label_window_embargo_train_eval",
+      "observed": "last train entry month 2014-06-01 first eval entry month 2015-10-01 gap months 16",
+      "expected": "at least 15 months separate the last train entry month from the first eval entry month so the 14 month label window cannot overlap the next split",
+      "passed": true
+    },
+    {
+      "check": "label_window_embargo_eval_holdout",
+      "observed": "last eval entry month 2016-09-01 first holdout entry month 2018-01-01 gap months 16",
+      "expected": "at least 15 months separate the last eval entry month from the first holdout entry month so the 14 month label window cannot overlap the next split",
+      "passed": true
+    },
+    {
+      "check": "train_target_balance",
+      "observed": "positives 1188 negatives 2546",
+      "expected": "the training split contains both outcome classes",
+      "passed": true
+    }
+  ]
+}

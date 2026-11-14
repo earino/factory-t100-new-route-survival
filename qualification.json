@@ -1,0 +1,899 @@
+{
+ "ok": true,
+ "dataset": "/output/extract",
+ "gate_version": "1.6.1",
+ "artifact": {
+  "train": {
+   "file": "public/train.csv",
+   "sha256": "ad03c5c26d3dca0e4a36d8817d18ba1f9a4aaa753081b61428b756829e689f83",
+   "bytes": 588190
+  },
+  "eval": {
+   "file": "public/eval.csv",
+   "sha256": "6c207acf6758e8f1b5b8e82e9e8d98b24915c29d6dddea994acce3ef105bc5a8",
+   "bytes": 131270
+  },
+  "holdout": {
+   "file": "private/holdout.csv",
+   "sha256": "f1d2222651817345b9fe54a969d0055f62121b982c085939f4f3d20c643d9a28",
+   "bytes": 190409
+  },
+  "meta.json": {
+   "file": "meta.json",
+   "sha256": "99a0fb7365fe24f3d363a48ced60ec7a0ec18f01fb83610e075861831da5a18f",
+   "bytes": 2084
+  },
+  "quality.json": {
+   "file": "quality.json",
+   "sha256": "68b32b53a07827208092cbf96ac4891cc1da18990dab697c2fc0336f24b64a88",
+   "bytes": 29777
+  },
+  "scanned_files": {
+   "meta.json": "99a0fb7365fe24f3d363a48ced60ec7a0ec18f01fb83610e075861831da5a18f",
+   "private/holdout.csv": "f1d2222651817345b9fe54a969d0055f62121b982c085939f4f3d20c643d9a28",
+   "public/eval.csv": "6c207acf6758e8f1b5b8e82e9e8d98b24915c29d6dddea994acce3ef105bc5a8",
+   "public/train.csv": "ad03c5c26d3dca0e4a36d8817d18ba1f9a4aaa753081b61428b756829e689f83",
+   "quality.json": "68b32b53a07827208092cbf96ac4891cc1da18990dab697c2fc0336f24b64a88"
+  },
+  "artifact_version": {
+   "digest": "fa26f4e978cfd24a70d86394dac2e3dc9ddf148346ed1e186b04b346bd064001",
+   "components": [
+    "eval",
+    "holdout",
+    "meta.json",
+    "quality.json",
+    "train"
+   ]
+  }
+ },
+ "results": [
+  {
+   "check": "descriptor",
+   "ok": true,
+   "detail": "quality.json loaded for 't100-new-route-survival'",
+   "evidence": {}
+  },
+  {
+   "check": "battery.exact_recovery",
+   "ok": true,
+   "detail": "Any zero-error exact reconstruction of a scored row blocks qualification",
+   "evidence": {
+    "version": "1.0.0",
+    "ok": true,
+    "input_digest": "b7406ca928fc1509a75f8aa094073605a0c055e3fb8eeb390e5093eb20cf382e",
+    "code": {
+     "artifact_scrub.py": "8c663253e691a7b8751f9c853b40a3752a833360caafb1ea8e8f534e64af4b68",
+     "leakage_battery.py": "adbf7ee0aca0012b78cc1f1e4aeb968a23717cae30f66a02e080215e75f830e3",
+     "recovery_recipes.py": "f64c542fcda232169c95ace17421b45275194b934938c0ea4c9b68e6f844ad0e"
+    },
+    "freeze_sha256": "c32c6069c408a24abe338c0752f380d40ea017ade1a7bb60d405180ff04acccc",
+    "all_results_sha256": "373f190a77732e8a9f35ce4559e7909bf88eb13496b56189c85dd04c5f1e24ef",
+    "detail_files": {
+     "results-0000.jsonl": {
+      "sha256": "0e619f15125c386a76952ea4fcec97c41c46a12f1b10971c74ce1f0e27307a1d",
+      "bytes": 245618
+     },
+     "results-0001.jsonl": {
+      "sha256": "da683e01f32cf68763ee2cb924e818493d16803f8d8eb812ac703f6efc589c2a",
+      "bytes": 23187
+     }
+    },
+    "exact": [],
+    "failures": [],
+    "flags": [
+     {
+      "name": "all:explore:dest_city_market_id+origin_city_market_id:30:carrier_active_pairs_prior_12m",
+      "kind": "heuristic",
+      "split": "eval",
+      "sha256": "e7ba674035c3fa5577eaff11303b214ab68fea81d02b964e55a6b180e01381f0",
+      "rows": 834,
+      "covered": 5,
+      "errors": null,
+      "auc_covered": 1.0,
+      "auc_full": 0.5014316661313579
+     },
+     {
+      "name": "all:explore:dest_city_market_id+origin_city_market_id:30:carrier_departures_prior_12m",
+      "kind": "heuristic",
+      "split": "eval",
+      "sha256": "d12bdae73cb63ae4135610fb702588325f2948486c7a46e45203240ae73acfe5",
+      "rows": 834,
+      "covered": 5,
+      "errors": null,
+      "auc_covered": 1.0,
+      "auc_full": 0.5014316661313579
+     },
+     {
+      "name": "all:explore:dest_city_market_id+origin_city_market_id:30:carrier_route_attrition_prior_12m",
+      "kind": "heuristic",
+      "split": "eval",
+      "sha256": "c07ec7d8873aeda24e807072a669e41344ae12d42caead03072276f09864040e",
+      "rows": 834,
+      "covered": 5,
+      "errors": null,
+      "auc_covered": 1.0,
+      "auc_full": 0.49860933623994586
+     },
+     {
+      "name": "all:explore:dest_city_market_id+origin_city_market_id:30:pair_departures_prior_3m",
+      "kind": "heuristic",
+      "split": "eval",
+      "sha256": "8d1ebf0df5814cb7b10b50d41c5fc1353f613cdfdaff5538deac7f4c4c9d4b91",
+      "rows": 834,
+      "covered": 5,
+      "errors": null,
+      "auc_covered": 0.0,
+      "auc_full": 0.5013906637600541
+     },
+     {
+      "name": "lookup:carrier_active_pairs_prior_12m+carrier_route_attrition_prior_12m",
+      "kind": "supervised",
+      "split": "holdout",
+      "sha256": "f847c2841ac00121a1f0d69b6473211b2c2951fb22a07ae4886542b21f45c183",
+      "rows": 1209,
+      "covered": 6,
+      "errors": null,
+      "auc_covered": 1.0,
+      "auc_full": 0.5002100840336134
+     },
+     {
+      "name": "lookup:carrier_active_pairs_prior_12m+pair_departures_prior_3m",
+      "kind": "supervised",
+      "split": "eval",
+      "sha256": "f2fff929060b2c0c1f87ba131b0f97c3f9f9324ed8f365058c08f2cd459950fa",
+      "rows": 834,
+      "covered": 6,
+      "errors": null,
+      "auc_covered": 1.0,
+      "auc_full": 0.5034305317324185
+     },
+     {
+      "name": "lookup:carrier_route_attrition_prior_12m+unique_carrier",
+      "kind": "supervised",
+      "split": "eval",
+      "sha256": "94ee325ddd1a948e4a62a31ed81772588503483f02c28645db5b3d67581ae9aa",
+      "rows": 834,
+      "covered": 4,
+      "errors": 0,
+      "auc_covered": 1.0,
+      "auc_full": 0.5056856621541279
+     },
+     {
+      "name": "lookup:competing_carriers_prior_3m+dest_market_departures_prior_12m",
+      "kind": "supervised",
+      "split": "holdout",
+      "sha256": "1aec6a00318886fd9d5407b244291f9e4a04b674e07e5f2350e120d0a1368a79",
+      "rows": 1209,
+      "covered": 5,
+      "errors": null,
+      "auc_covered": 1.0,
+      "auc_full": 0.5013805522208884
+     },
+     {
+      "name": "lookup:dest_market_departures_prior_12m+entry_month_seats_per_departure",
+      "kind": "supervised",
+      "split": "eval",
+      "sha256": "cc52c6170b6cf894ce9722bacfe280ff909a517328880a7b74c76a7fbfdfa1d8",
+      "rows": 834,
+      "covered": 2,
+      "errors": 0,
+      "auc_covered": 1.0,
+      "auc_full": 0.5028462479413393
+     },
+     {
+      "name": "lookup:dest_market_departures_prior_12m+pair_departures_prior_3m",
+      "kind": "supervised",
+      "split": "holdout",
+      "sha256": "1aec6a00318886fd9d5407b244291f9e4a04b674e07e5f2350e120d0a1368a79",
+      "rows": 1209,
+      "covered": 5,
+      "errors": null,
+      "auc_covered": 1.0,
+      "auc_full": 0.5013805522208884
+     },
+     {
+      "name": "lookup:entry_month_seats_per_departure+origin_market_departures_prior_12m",
+      "kind": "supervised",
+      "split": "eval",
+      "sha256": "21d9bb5ec4bbf5fabb5818aa8f90489aacd286186b0ece8a5297b4f2ac9a1cbb",
+      "rows": 834,
+      "covered": 2,
+      "errors": 0,
+      "auc_covered": 1.0,
+      "auc_full": 0.5028462479413393
+     },
+     {
+      "name": "lookup_unanimous:carrier_active_pairs_prior_12m+entry_month_departures",
+      "kind": "supervised",
+      "split": "holdout",
+      "sha256": "646c6c6a1247fa37856d1382fa50e91e2e3b996604a9b24ee552e57714656757",
+      "rows": 1209,
+      "covered": 8,
+      "errors": 0,
+      "auc_covered": 1.0,
+      "auc_full": 0.5061614645858343
+     },
+     {
+      "name": "lookup_unanimous:carrier_route_attrition_prior_12m+unique_carrier",
+      "kind": "supervised",
+      "split": "eval",
+      "sha256": "94ee325ddd1a948e4a62a31ed81772588503483f02c28645db5b3d67581ae9aa",
+      "rows": 834,
+      "covered": 4,
+      "errors": 0,
+      "auc_covered": 1.0,
+      "auc_full": 0.5056856621541279
+     },
+     {
+      "name": "self:explore:dest_city_market_id+origin_city_market_id:30:carrier_active_pairs_prior_12m",
+      "kind": "heuristic",
+      "split": "eval",
+      "sha256": "e7ba674035c3fa5577eaff11303b214ab68fea81d02b964e55a6b180e01381f0",
+      "rows": 834,
+      "covered": 5,
+      "errors": null,
+      "auc_covered": 1.0,
+      "auc_full": 0.5014316661313579
+     },
+     {
+      "name": "self:explore:dest_city_market_id+origin_city_market_id:30:carrier_departures_prior_12m",
+      "kind": "heuristic",
+      "split": "eval",
+      "sha256": "d12bdae73cb63ae4135610fb702588325f2948486c7a46e45203240ae73acfe5",
+      "rows": 834,
+      "covered": 5,
+      "errors": null,
+      "auc_covered": 1.0,
+      "auc_full": 0.5014316661313579
+     },
+     {
+      "name": "self:explore:dest_city_market_id+origin_city_market_id:30:carrier_route_attrition_prior_12m",
+      "kind": "heuristic",
+      "split": "eval",
+      "sha256": "c07ec7d8873aeda24e807072a669e41344ae12d42caead03072276f09864040e",
+      "rows": 834,
+      "covered": 5,
+      "errors": null,
+      "auc_covered": 1.0,
+      "auc_full": 0.49860933623994586
+     },
+     {
+      "name": "self:explore:dest_city_market_id+origin_city_market_id:30:pair_departures_prior_3m",
+      "kind": "heuristic",
+      "split": "eval",
+      "sha256": "8d1ebf0df5814cb7b10b50d41c5fc1353f613cdfdaff5538deac7f4c4c9d4b91",
+      "rows": 834,
+      "covered": 5,
+      "errors": null,
+      "auc_covered": 0.0,
+      "auc_full": 0.5013906637600541
+     },
+     {
+      "name": "lookup:carrier_route_attrition_prior_12m+entry_month_departures",
+      "kind": "supervised",
+      "split": "eval",
+      "sha256": "720577a29c70f9bf49b06d02ac9476b8a24ab68253d103584dad5148cff34b05",
+      "rows": 834,
+      "covered": 24,
+      "errors": null,
+      "auc_covered": 0.9523809523809523,
+      "auc_full": 0.5169715648555008
+     }
+    ],
+    "flag_count": 18,
+    "attempted": {
+     "heuristic": 1056,
+     "statistical": 666,
+     "supervised": 760
+    },
+    "constant_or_uncovered": {
+     "heuristic": 916,
+     "statistical": 248,
+     "supervised": 339
+    },
+    "scope": {
+     "donors": [
+      "self",
+      "all"
+     ],
+     "exploratory_keys": 8,
+     "exploratory_operands": 8,
+     "max_columns": 128,
+     "scored_labels_read": false,
+     "tokens_per_column": 80,
+     "train_labels": "supervised controls only"
+    }
+   }
+  },
+  {
+   "check": "battery.recorded_in_quality",
+   "ok": true,
+   "detail": "Construction must record the computed battery receipt in quality.json; use --record-battery",
+   "evidence": {}
+  },
+  {
+   "check": "artifacts.no_shipped_answers",
+   "ok": true,
+   "detail": "Every generated artifact file is scanned for shipped answer scaffolds",
+   "evidence": {
+    "version": "1.0.1",
+    "ok": true,
+    "files": {
+     "meta.json": "99a0fb7365fe24f3d363a48ced60ec7a0ec18f01fb83610e075861831da5a18f",
+     "private/holdout.csv": "f1d2222651817345b9fe54a969d0055f62121b982c085939f4f3d20c643d9a28",
+     "public/eval.csv": "6c207acf6758e8f1b5b8e82e9e8d98b24915c29d6dddea994acce3ef105bc5a8",
+     "public/train.csv": "ad03c5c26d3dca0e4a36d8817d18ba1f9a4aaa753081b61428b756829e689f83",
+     "quality.json": "68b32b53a07827208092cbf96ac4891cc1da18990dab697c2fc0336f24b64a88"
+    },
+    "tree_digest": "e50a98811b43c5dd86ad113568b82f6ef7923064eb6b4fce8e4a5072afef3df1",
+    "findings": [],
+    "finding_count": 0,
+    "truncated": false,
+    "scope": {
+     "identifier_count": 2043,
+     "scored_windows": [
+      [
+       "2015-10-01",
+       "2016-10-01"
+      ],
+      [
+       "2018-01-01",
+       "2019-01-01"
+      ]
+     ],
+     "split_files_excluded": 3,
+     "executes_code": false
+    }
+   }
+  },
+  {
+   "check": "contract.declared",
+   "ok": true,
+   "detail": "evaluation_contract required: intended use, access, vintage and evidence",
+   "evidence": {}
+  },
+  {
+   "check": "contract.scope",
+   "ok": true,
+   "detail": "use='retrospective_research'; access='isolated_rows'; eval is development, holdout is final",
+   "evidence": {}
+  },
+  {
+   "check": "contract.vintage_and_selection",
+   "ok": true,
+   "detail": "Vintage, selection and limitations must be explicit; declarations are not measurements",
+   "evidence": {}
+  },
+  {
+   "check": "contract.label_availability",
+   "ok": true,
+   "detail": "No full-row availability ledger: training-label timing UNVERIFIED; retrospective use only",
+   "evidence": {}
+  },
+  {
+   "check": "contract.every_input_has_availability_evidence",
+   "ok": true,
+   "detail": "Every solver-visible non-target column needs availability evidence; missing: []",
+   "evidence": {}
+  },
+  {
+   "check": "contract.cross_row_review",
+   "ok": true,
+   "detail": "Document applicable cross-row probes and every solver-visible auxiliary file",
+   "evidence": {}
+  },
+  {
+   "check": "leakage.declared_columns",
+   "ok": true,
+   "detail": "every shipped column is declared",
+   "evidence": {
+    "undeclared": []
+   }
+  },
+  {
+   "check": "leakage.answer_source_absent",
+   "ok": true,
+   "detail": "no answer source or post-hoc column is shipped",
+   "evidence": {
+    "shipped_forbidden": []
+   }
+  },
+  {
+   "check": "leakage.every_column_could_be_scored",
+   "ok": true,
+   "detail": "every column was scored for leakage",
+   "evidence": {
+    "unscorable": []
+   }
+  },
+  {
+   "check": "leakage.no_single_column_determines_the_target",
+   "ok": true,
+   "detail": "no shipped column separates the classes on its own",
+   "evidence": {
+    "offenders": [],
+    "high_cardinality": [
+     "carrier_route_attrition_prior_12m@eval",
+     "distance_miles@holdout",
+     "distance_miles@train",
+     "episode_id@eval",
+     "episode_id@holdout",
+     "episode_id@train"
+    ],
+    "missing_splits": []
+   }
+  },
+  {
+   "check": "leakage.high_cardinality_declared",
+   "ok": true,
+   "detail": "high-cardinality columns are declared as identifiers or free fields",
+   "evidence": {
+    "undeclared": [],
+    "declared": [
+     "carrier_route_attrition_prior_12m",
+     "dest_city_market_id",
+     "distance_miles",
+     "entry_month",
+     "episode_id",
+     "origin_city_market_id",
+     "unique_carrier"
+    ]
+   }
+  },
+  {
+   "check": "timing.prediction_time_declared",
+   "ok": true,
+   "detail": "prediction instant is declared",
+   "evidence": {}
+  },
+  {
+   "check": "timing.no_post_hoc_feature",
+   "ok": true,
+   "detail": "no feature is documented as post-hoc",
+   "evidence": {
+    "overlap": []
+   }
+  },
+  {
+   "check": "timing.label_source_is_not_a_feature",
+   "ok": true,
+   "detail": "the label source is not a feature",
+   "evidence": {
+    "source_features": []
+   }
+  },
+  {
+   "check": "timing.every_feature_documented",
+   "ok": true,
+   "detail": "features documented as available 'prediction_time'",
+   "evidence": {
+    "features_documented_at": "prediction_time"
+   }
+  },
+  {
+   "check": "timing.instant_declared",
+   "ok": true,
+   "detail": "prediction instant kind='publication' citation=True",
+   "evidence": {
+    "prediction_instant": {
+     "citation": "T-100 monthly carrier filings; no publisher schedule was supplied, so a conservative 90-day administrative availability lag is assumed. This instant is expressed as a lag-derived availability instant derived from that assumption, not a measured publication date.",
+     "days_after_period_end": 90,
+     "kind": "publication",
+     "period": "M"
+    }
+   }
+  },
+  {
+   "check": "timing.publication_lag_measured",
+   "ok": true,
+   "detail": "0 of 0 observed period_end -> published dates are usable",
+   "evidence": {
+    "observations": [],
+    "measured_lag_days": null,
+    "source_kind": "administrative_record"
+   }
+  },
+  {
+   "check": "timing.features_available_at_instant",
+   "ok": true,
+   "detail": "features publish 90d after the period, instant is 90d after it",
+   "evidence": {
+    "features_lag_days": 90,
+    "instant_lag_days": 90,
+    "measured_lag_days": null
+   }
+  },
+  {
+   "check": "timing.instant_accounts_for_publication_lag",
+   "ok": true,
+   "detail": "instant is a publication instant",
+   "evidence": {
+    "kind": "publication",
+    "features_lag_days": 90
+   }
+  },
+  {
+   "check": "timing.selection_uses_only_available_data",
+   "ok": true,
+   "detail": "row selection declares its latest period as 'M'",
+   "evidence": {
+    "latest_period_used": "M",
+    "fields": [
+     "Class",
+     "Passengers",
+     "DepPerformed",
+     "Year",
+     "Month",
+     "UniqueCarrier",
+     "OriginCityMarketID",
+     "DestCityMarketID"
+    ],
+    "rule": "Frozen eligibility uses Class F, total Passengers greater than zero, total DepPerformed at least 8 in month M, zero performed departures on the directed pair in M-12 through M-1, and an entry month inside the fixed split windows. Only month M and prior months enter eligibility or features. Rows whose anniversary window M+12 through M+14 is not fully reported are omitted from supervised output as unknown-label rows and are never relabelled negative. No outcome value enters eligibility."
+   }
+  },
+  {
+   "check": "units.measured_columns_declare_unit_and_frame",
+   "ok": true,
+   "detail": "5 measured column(s) declare unit and frame",
+   "evidence": {
+    "measurements": [
+     {
+      "column": "entry_month_departures",
+      "frame": "Class F DepPerformed summed over the entry month M",
+      "unit": "departures performed"
+     },
+     {
+      "column": "distance_miles",
+      "frame": "reported nonstop segment Distance, modal across entry-month Class F rows",
+      "unit": "statute miles"
+     },
+     {
+      "column": "entry_month_seats_per_departure",
+      "frame": "Class F Seats divided by Class F DepPerformed for month M",
+      "unit": "seats per departure"
+     },
+     {
+      "column": "entry_month_load_factor",
+      "frame": "Class F Passengers divided by Class F Seats for month M",
+      "unit": "ratio"
+     },
+     {
+      "column": "carrier_route_attrition_prior_12m",
+      "frame": "share of carrier directed pairs active in M-12 with no departures in M",
+      "unit": "ratio"
+     }
+    ]
+   }
+  },
+  {
+   "check": "units.validation_receipt",
+   "ok": true,
+   "detail": "External-threshold checks need a source-bound counts-only receipt; never ship fixture answers",
+   "evidence": {
+    "receipt": {
+     "checks": 5,
+     "mismatches": 0,
+     "source": "source-checks.json: unit checks",
+     "evidence_sha256": "4860cdaf6b44d5fb29476139d09b88a4c2f7071546d78cb6afcb37bef63c19e9"
+    }
+   }
+  },
+  {
+   "check": "splits.time_column_declared",
+   "ok": true,
+   "detail": "split overlap is checked against 'entry_month'",
+   "evidence": {}
+  },
+  {
+   "check": "splits.machine_readable_windows",
+   "ok": true,
+   "detail": "train/eval/holdout windows are declared with start/end",
+   "evidence": {
+    "split_windows": {
+     "eval": {
+      "end": "2016-10-01T00:00:00.000",
+      "start": "2015-10-01T00:00:00.000"
+     },
+     "holdout": {
+      "end": "2019-01-01T00:00:00.000",
+      "start": "2018-01-01T00:00:00.000"
+     },
+     "train": {
+      "end": "2014-07-01T00:00:00.000",
+      "start": null
+     }
+    }
+   }
+  },
+  {
+   "check": "splits.files_present",
+   "ok": true,
+   "detail": "all three split files exist",
+   "evidence": {
+    "missing": []
+   }
+  },
+  {
+   "check": "splits.non_empty",
+   "ok": true,
+   "detail": "every split has rows",
+   "evidence": {
+    "train": {
+     "rows": 3734,
+     "positives": 1188,
+     "negatives": 2546,
+     "positive_rate": 0.318157
+    },
+    "eval": {
+     "rows": 834,
+     "positives": 251,
+     "negatives": 583,
+     "positive_rate": 0.300959
+    },
+    "holdout": {
+     "rows": 1209,
+     "positives": 425,
+     "negatives": 784,
+     "positive_rate": 0.35153
+    }
+   }
+  },
+  {
+   "check": "splits.eval_and_holdout_have_both_classes",
+   "ok": true,
+   "detail": "eval and holdout each contain positives and negatives",
+   "evidence": {
+    "train": {
+     "rows": 3734,
+     "positives": 1188,
+     "negatives": 2546,
+     "positive_rate": 0.318157
+    },
+    "eval": {
+     "rows": 834,
+     "positives": 251,
+     "negatives": 583,
+     "positive_rate": 0.300959
+    },
+    "holdout": {
+     "rows": 1209,
+     "positives": 425,
+     "negatives": 784,
+     "positive_rate": 0.35153
+    }
+   }
+  },
+  {
+   "check": "splits.positive_events_declared",
+   "ok": true,
+   "detail": "eval and holdout declare positives and distinct events",
+   "evidence": {
+    "declared": {
+     "train": {
+      "positives": 1188,
+      "distinct_events": 49
+     },
+     "eval": {
+      "positives": 251,
+      "distinct_events": 26
+     },
+     "holdout": {
+      "positives": 425,
+      "distinct_events": 32
+     }
+    }
+   }
+  },
+  {
+   "check": "splits.positive_events_match_rows",
+   "ok": true,
+   "detail": "declared positive counts match the rows",
+   "evidence": {
+    "mismatched": []
+   }
+  },
+  {
+   "check": "splits.event_key_column_declared",
+   "ok": true,
+   "detail": "clustered events are counted by 'unique_carrier' (date part)",
+   "evidence": {}
+  },
+  {
+   "check": "splits.distinct_events_match_rows",
+   "ok": true,
+   "detail": "declared clustered event counts match the rows",
+   "evidence": {
+    "recomputed": {
+     "train": 49,
+     "eval": 26,
+     "holdout": 32
+    },
+    "declared": {
+     "train": {
+      "positives": 1188,
+      "distinct_events": 49
+     },
+     "eval": {
+      "positives": 251,
+      "distinct_events": 26
+     },
+     "holdout": {
+      "positives": 425,
+      "distinct_events": 32
+     }
+    }
+   }
+  },
+  {
+   "check": "splits.enough_clustered_positives",
+   "ok": true,
+   "detail": "eval and holdout carry enough independent positive events to score",
+   "evidence": {
+    "thin": [],
+    "recomputed_events": {
+     "train": 49,
+     "eval": 26,
+     "holdout": 32
+    },
+    "minimums": {
+     "positives": 30,
+     "distinct_events": 20
+    }
+   }
+  },
+  {
+   "check": "splits.rates_not_uniform",
+   "ok": true,
+   "detail": "positive rates are between 0 and 1",
+   "evidence": {
+    "rates": [
+     0.318157,
+     0.300959,
+     0.35153
+    ]
+   }
+  },
+  {
+   "check": "splits.actual_ranges_computed",
+   "ok": true,
+   "detail": "row timestamps found for every split",
+   "evidence": {
+    "ranges": {
+     "train": {
+      "min": "2011-01-01",
+      "max": "2014-06-01"
+     },
+     "eval": {
+      "min": "2015-10-01",
+      "max": "2016-09-01"
+     },
+     "holdout": {
+      "min": "2018-01-01",
+      "max": "2018-12-01"
+     }
+    }
+   }
+  },
+  {
+   "check": "splits.actual_ranges_disjoint",
+   "ok": true,
+   "detail": "the rows of the three splits occupy disjoint periods",
+   "evidence": {
+    "ranges": {
+     "train": {
+      "min": "2011-01-01",
+      "max": "2014-06-01"
+     },
+     "eval": {
+      "min": "2015-10-01",
+      "max": "2016-09-01"
+     },
+     "holdout": {
+      "min": "2018-01-01",
+      "max": "2018-12-01"
+     }
+    },
+    "overlaps": []
+   }
+  },
+  {
+   "check": "splits.rows_within_declared_windows",
+   "ok": true,
+   "detail": "every row falls inside its split's declared window",
+   "evidence": {
+    "windows": {
+     "eval": {
+      "end": "2016-10-01T00:00:00.000",
+      "start": "2015-10-01T00:00:00.000"
+     },
+     "holdout": {
+      "end": "2019-01-01T00:00:00.000",
+      "start": "2018-01-01T00:00:00.000"
+     },
+     "train": {
+      "end": "2014-07-01T00:00:00.000",
+      "start": null
+     }
+    },
+    "ranges": {
+     "train": {
+      "min": "2011-01-01",
+      "max": "2014-06-01"
+     },
+     "eval": {
+      "min": "2015-10-01",
+      "max": "2016-09-01"
+     },
+     "holdout": {
+      "min": "2018-01-01",
+      "max": "2018-12-01"
+     }
+    }
+   }
+  },
+  {
+   "check": "splits.no_cross_split_entities",
+   "ok": true,
+   "detail": "no episode_id appears in more than one split",
+   "evidence": {
+    "shared_sample": [],
+    "shared_count": 0
+   }
+  },
+  {
+   "check": "splits.duplicate_entities_within_splits",
+   "ok": true,
+   "detail": "0 repeated-identifier rows within splits, at most the declared 0",
+   "evidence": {
+    "duplicate_rows": {},
+    "declared": 0
+   }
+  },
+  {
+   "check": "runner.layout",
+   "ok": true,
+   "detail": "holdout is private and train/eval are public",
+   "evidence": {}
+  },
+  {
+   "check": "runner.meta_json_keys",
+   "ok": true,
+   "detail": "meta.json carries the keys the runner reads",
+   "evidence": {
+    "keys": [
+     "columns",
+     "description",
+     "id_columns",
+     "name",
+     "positive_label",
+     "positive_rate",
+     "rows",
+     "split",
+     "split_description",
+     "target"
+    ]
+   }
+  },
+  {
+   "check": "runner.meta_matches_files",
+   "ok": true,
+   "detail": "meta.json agrees with the split files",
+   "evidence": {
+    "problems": []
+   }
+  },
+  {
+   "check": "runner.meta_counts_match_files",
+   "ok": true,
+   "detail": "meta rows and rates match the files",
+   "evidence": {}
+  },
+  {
+   "check": "runner.id_columns_are_not_features",
+   "ok": true,
+   "detail": "declared identifiers are not also listed as features",
+   "evidence": {}
+  }
+ ],
+ "failed_checks": []
+}
