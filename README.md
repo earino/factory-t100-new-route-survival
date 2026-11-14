@@ -15,6 +15,14 @@ configs:
     path: extract/private/holdout.csv
 ---
 
+<!-- dataset-factory:links -->
+**Dataset Factory · v-d32decf32c315be4**
+
+[Dataset website](https://earino.github.io/factory-t100-new-route-survival/versions/v-d32decf32c315be4/) · [GitHub release](https://github.com/earino/factory-t100-new-route-survival/releases/tag/v-d32decf32c315be4) · [Hugging Face](https://huggingface.co/datasets/earino/factory-t100-new-route-survival/tree/v-d32decf32c315be4) · [Catalogue](https://earino.github.io/dataset-factory-site/)
+
+Artifact: fa26f4e978cfd24a70d86394dac2e3dc9ddf148346ed1e186b04b346bd064001
+<!-- /dataset-factory:links -->
+
 # Will a newly launched U.S. domestic nonstop airline route still be operating a year later? Forward route-survival prediction from T-100 segment reports
 
 When a U.S. certificated carrier starts scheduled passenger nonstop service on a domestic city market pair it has not served in the previous 12 months, will that service still be operating in the anniversary quarter 12-14 months later?
